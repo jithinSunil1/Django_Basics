@@ -59,7 +59,7 @@ def shopreg(request):
     image = request.FILES.get("Photo")
     if request.method =="POST":
         email = request.POST.get("email")
-        password = request.POST.get("Password")
+        password = request.POST.get("password")
         try:
             shop = firebase_admin.auth.create_user(email=email,password=password)
         except (firebase_admin._auth_utils.EmailAlreadyExistsError,ValueError) as error:
@@ -78,4 +78,28 @@ def shopreg(request):
     return render(request,"Guest/Shopreg.html",{"district":dis_data})
 
 def loginpage(request):
-    return render(request,"Guest/Loginpage.html")
+    userid = ""
+    shopid = ""
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        try:
+            data = authe.sign_in_with_email_and_password(email,password)
+        except:
+            return render(request,"Guest/Loginpage.html",{"msg":"Error in Email Or Password"})
+        user = db.collection("tbl_user").where("user_id", "==", data["localId"]).stream()
+        for u in user:
+            userid = u.id
+        shop= db.collection("tbl_shop").where("shop_id","==",data["localId"]).stream()    
+        for s in shop:
+            shopid = s.id
+        if userid:
+            request.session["uid"] = userid
+            return redirect("webuser:homepage")
+        elif shopid:
+            request.session["sid"] = shopid
+            return redirect("webshop:homepage")
+        else:
+            return render(request,"Guest/Loginpage.html",{"msg":"error"})
+    else:
+        return render(request,"Guest/Loginpage.html")

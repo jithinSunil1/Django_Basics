@@ -11,19 +11,19 @@
         <table>
             <tr>
                 <td>Name</td>
-                <td>{{user.user_name}}</td>
+                <td>{{shop.shop_name}}</td>
             </tr>
             <tr>
                 <td>Contact</td>
-                <td>{{user.user_contact}}</td>
+                <td>{{shop.shop_contact}}</td>
             </tr>
             <tr>
                 <td>Address</td>
-                <td>{{user.user_address}}</td>
+                <td>{{shop.shop_address}}</td>
             </tr>
             <tr>
                 <td colspan="2" align="center"><a href="">Edit Profile</a>
-                <a href="{% url 'webuser:changepass' %}">Change Password</a></td>
+                <a href="{% url 'webshop:changepass' %}">Change Password</a></td>
             </tr>
         </table>
     </form>

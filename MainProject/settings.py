@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'Admin',
     'Guest',
     'User',
+    'Shop',
 ]
 
 MIDDLEWARE = [
@@ -130,3 +131,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 cred =credentials.Certificate('Db\mainproject-bc028-firebase-adminsdk-6rt0f-21a043852f.json')
 app=firebase_admin.initialize_app(cred)
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'jithinmainproject@gmail.com'
+EMAIL_HOST_PASSWORD = 'mbasmbxrkzecthag'

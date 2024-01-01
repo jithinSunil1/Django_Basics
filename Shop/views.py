@@ -6,6 +6,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib import messages
 
+
 db=firestore.client()
 
 config = {
@@ -23,26 +24,33 @@ firebase = pyrebase.initialize_app(config)
 authe = firebase.auth()
 st = firebase.storage()
 
+
 def homepage(request):
-    user = db.collection("tbl_user").document(request.session["uid"]).get().to_dict()
-    return render(request,"User/Homepage.html",{"user":user})
+    shop = db.collection("tbl_shop").document(request.session["sid"]).get().to_dict()
 
-def myprofile(request):
-    user = db.collection("tbl_user").document(request.session["uid"]).get().to_dict()
-    return render(request,"User/Myprofile.html",{"user":user})
-def editprofile(request):
-    user = db.collection("tbl_user").document(request.session["uid"]).get().to_dict()
+    return render(request,"Shop/Homepage.html")
+# Create your views here.
+
+
+def Myprofile (request):
+    shop = db.collection("tbl_shop").document(request.session["sid"]).get().to_dict()
+
+    return render(request,"Shop/Myprofile.html",{"shop":shop})
+
+
+
+def editprofile (request):
+    shop = db.collection("tbl_shop").document(request.session["sid"]).get().to_dict()
     if request.method=="POST":
-      data={"user_name":request.POST.get("name"),"user_contact":request.POST.get("contact"),"user_address":request.POST.get("address")}
-      db.collection("tbl_user").document(request.session["uid"]).update(data)
-      return redirect("webuser:myprofile")
+      data={"shop_name":request.POST.get("name"),"shop_contact":request.POST.get("contact"),"shop_address":request.POST.get("address")}
+      db.collection("tbl_shop").document(request.session["sid"]).update(data)
+      return redirect("webshop:Myprofile")
     else:
-      return render(request,"User/Editprofile.html",{"user":user})
-
-  
+      return render(request,"Shop/Editprofile.html",{"shop":shop})
+    
 def changepass(request):
-  user = db.collection("tbl_user").document(request.session["uid"]).get().to_dict()
-  email = user["user_email"]
+  shop = db.collection("tbl_shop").document(request.session["sid"]).get().to_dict()
+  email = shop["shop_email"]
   password_link = firebase_admin.auth.generate_password_reset_link(email) 
   send_mail(
     'Reset your password ', #subject
@@ -50,4 +58,7 @@ def changepass(request):
     settings.EMAIL_HOST_USER,
     [email],
   )
-  return render(request,"User/Homepage.html",{"msg":email})
+  return render(request,"Shop/Homepage.html",{"msg":email})
+
+
+# Create your views here.
